@@ -34,30 +34,58 @@ RSpec.describe 'the plots index' do
       )
     end
 
-    it 'I see a list of all plot numbers' do
-      visit plots_path
+    describe 'user story 1' do
+      it 'I see a list of all plot numbers' do
+        visit plots_path
 
-      expect(page).to have_content @plot_1.number
-      expect(page).to have_content @plot_2.number
-    end
-
-    it 'Under each plot number, I see names of all that plots plants' do
-      visit plots_path
-
-      within "div#plot-#{@plot_1.id}" do
-        expect(page).to have_content @plant_1.name
-        expect(page).to have_content @plant_2.name
-        # expect(@plot_1.number).to appear_before(@plant_1.name)
-        # expect(@plot_1.number).to appear_before(@plant_2.name)
-        # can't get these orderly tests to work correctly, not sure why
+        expect(page).to have_content @plot_1.number
+        expect(page).to have_content @plot_2.number
       end
 
-      within "div#plot-#{@plot_2.id}" do
-        expect(page).to have_content @plant_3.name
-        expect(page).to have_content @plant_4.name
-        # expect(@plot_2.number).to appear_before(@plant_3.name)
-        # expect(@plot_2.number).to appear_before(@plant_4.name)
-        # can't get these orderly tests to work correctly, not sure why
+      it 'Under each plot number, I see names of all that plots plants' do
+        visit plots_path
+
+        within "div#plot-#{@plot_1.id}" do
+          expect(page).to have_content @plant_1.name
+          expect(page).to have_content @plant_2.name
+          # expect(@plot_1.number).to appear_before(@plant_1.name)
+          # expect(@plot_1.number).to appear_before(@plant_2.name)
+          # can't get these orderly tests to work correctly, not sure why
+        end
+
+        within "div#plot-#{@plot_2.id}" do
+          expect(page).to have_content @plant_3.name
+          expect(page).to have_content @plant_4.name
+          # expect(@plot_2.number).to appear_before(@plant_3.name)
+          # expect(@plot_2.number).to appear_before(@plant_4.name)
+          # can't get these orderly tests to work correctly, not sure why
+        end
+      end
+    end
+
+    describe 'user story 2' do
+      it 'each plant has a link to remove that plant from that plot' do
+        visit plots_path
+
+        within "div#plot-#{@plot_1.id}" do
+          expect(page).to have_link "Remove #{@plant_1.name} from Plot #{@plot_1.number}"
+        end
+      end
+
+      it 'when I click that link, i return to the plots index page' do
+        visit plots_path
+        click_link "Remove #{@plant_1.name} from Plot #{@plot_1.number}"
+
+        expect(current_path).to eq plots_path
+      end
+
+      it 'after being removed, that plant is no longer listed for that plot' do
+        visit plots_path
+        click_link "Remove #{@plant_1.name} from Plot #{@plot_1.number}"
+
+        within "div#plot-#{@plot_1.id}" do
+          expect(page).to_not have_content @plant_1.name
+        end
       end
     end
   end
