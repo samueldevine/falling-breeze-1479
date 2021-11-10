@@ -1,0 +1,10 @@
+<h1><%= @garden.name %></h1><hr>
+
+<div id='plants'>
+<h2>Plants in this garden:</h2>
+<% @garden.show_plants.each do |plant| %>
+  <ul>
+    <li><%= plant.name %></li>
+  </ul>
+<% end %>
+</div>
