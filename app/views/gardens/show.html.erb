@@ -4,7 +4,7 @@
 <h2>Plants in this garden:</h2>
 <% @garden.show_plants.each do |plant| %>
   <ul>
-    <li><%= plant.name %></li>
+    <li><%= plant.name %> - <%= plant.num_plants %> plants in this garden</li>
   </ul>
 <% end %>
 </div>
