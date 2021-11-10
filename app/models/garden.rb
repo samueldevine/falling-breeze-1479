@@ -5,6 +5,11 @@ class Garden < ApplicationRecord
     Plant.joins(plots: :garden)
       .where(gardens: {id: id})
       .where("plants.days_to_harvest < 100")
-      .distinct
+      .group(:id)
+      .order(Arel.sql('COUNT(plants.id) DESC'))
+      .select(
+        "plants.* as plant,
+        COUNT(plants.id) as num_plants"
+      )
   end
 end
